@@ -2,40 +2,64 @@ import React, { useState } from 'react';
 import './order.css'
 
 function Order() {
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    description: '',
-  });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [phno, setPhno] = useState("")
+  const [order, setOrder] = useState("")
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert('Thank you for your submission! Your order has been received and is being processed.');
-    // You can also submit the form data to a server or perform other actions here
-  };
+  async function Submit(event) {
+    event.preventDefault()
+
+    const res = await fetch(`http://localhost:7777/api/orders`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        phno,
+        email,
+        order,
+      }),
+    })
+    console.log(res)
+  }
+
+
+  // const [formData, setFormData] = useState({
+  //   name: '',
+  //   phone: '',
+  //   email: '',
+  //   description: '',
+  // });
+  //
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormData({
+  //     ...formData,
+  //     [name]: value,
+  //   });
+  // };
+
+  // const handleSubmit = () => {
+  //   alert('Thank you for your submission! Your order has been received and is being processed.');
+  //   // You can also submit the form data to a server or perform other actions here
+  // };
 
   return (
     <div>
       <h1>Order Form</h1>
       <p>Please fill out the form below to place your order.</p>
 
-      <form onSubmit={handleSubmit}>
+      <form >
         <label htmlFor="name">Name:</label>
         <input
           type="text"
           id="name"
           name="name"
-          value={formData.name}
-          onChange={handleChange}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           required
         /><br /><br />
 
@@ -44,8 +68,8 @@ function Order() {
           type="tel"
           id="phone"
           name="phone"
-          value={formData.phone}
-          onChange={handleChange}
+          value={phno}
+          onChange={(e) => setPhno(e.target.value)}
           required
         /><br /><br />
 
@@ -54,23 +78,23 @@ function Order() {
           type="email"
           id="email"
           name="email"
-          value={formData.email}
-          onChange={handleChange}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           required
         /><br /><br />
 
-        <label htmlFor="description">Your Orders:</label><br />
+        <label htmlFor="order">Your Orders:</label><br />
         <textarea
           id="description"
           name="description"
           rows="4"
           cols="50"
-          value={formData.description}
-          onChange={handleChange}
+          value={order}
+          onChange={(e) => setOrder(e.target.value)}
           required
         ></textarea><br /><br />
 
-        <input type="submit" value="Submit" />
+        <input type="submit" value="Submit" onClick={Submit}/>
       </form>
     </div>
   );
